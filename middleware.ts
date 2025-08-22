@@ -1,11 +1,13 @@
+//middleware.ts
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
 const isPublicRoute = createRouteMatcher(['/','/products(.*)','/about']);
 
-
-
-export default clerkMiddleware((auth,req)=>{
-    if (!isPublicRoute(req)) auth().protect();
+export default clerkMiddleware(async (auth, req) => {
+    if (!isPublicRoute(req)) {
+        const authResult = await auth();
+        authResult.protect();
+    }
 });
 
 export const config = {
@@ -25,20 +27,14 @@ export const config = {
 
 
 
-
-
-
-
-// //middleware.ts
 // import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
 // const isPublicRoute = createRouteMatcher(['/','/products(.*)','/about']);
 
-// export default clerkMiddleware(async (auth, req) => {
-//     if (!isPublicRoute(req)) {
-//         const authResult = await auth();
-//         authResult.protect();
-//     }
+
+
+// export default clerkMiddleware((auth,req)=>{
+//     if (!isPublicRoute(req)) auth().protect();
 // });
 
 // export const config = {
@@ -49,3 +45,7 @@ export const config = {
 //     '/(api|trpc)(.*)',
 //   ],
 // };
+
+
+
+
